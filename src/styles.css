@@ -5,7 +5,20 @@
 
 }
 
+.border {
+    border: 1px solid black;
+}
+
+
 .flex-centered{
     display: flex;
     justify-content: center;
+}
+
+.chartbox {
+    width: 100%;
+}
+
+.fullscreen {
+    width: 100%;
 }

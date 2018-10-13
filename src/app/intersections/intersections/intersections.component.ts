@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { HighchartsChartComponent } from 'highcharts-angular';
+import { HighchartsChartComponent, HighchartsChartModule } from 'highcharts-angular';
 import { ChartModel } from '../../models/chart-interface';
 import { AppService } from '../../app.service';
 
@@ -10,52 +10,118 @@ import { AppService } from '../../app.service';
   styleUrls: ['./intersections.component.css']
 })
 export class IntersectionsComponent implements OnInit {
-  private Highcharts = Highcharts;
-  private chartConstructor:String = 'chart';
-  private chartOptions:ChartModel;
+  private Highcharts = Highcharts
+  private chartConstructor: String = ''
+  private chartOptions: ChartModel;
 
-  
 
-  constructor(private appService: AppService) { }
+
+  constructor(private appService: AppService) {
+
+
+  }
 
   ngOnInit() {
+
+    this.getData()
+  }
+
+
+
+  private getData(): void {
+    let categoriesArray = []
+    let seriesDataArray = []
+
+    const groupByStreets = (data): Object => {
+      const streetObj = {}
+      data.map(streetInfo => {
+        streetObj[streetInfo['primary_street'] + ' at ' + streetInfo['cross_street']] = streetInfo;
+      })
+      console.log('streetObj', streetObj);
+
+      return streetObj
+    };
+
+    const formatDates = (data): void => {
+      const dateOptions = { month: '2-digit', day: '2-digit', year: '2-digit' }
+      Object.keys(data).map(streetInfo => {
+        let dates = new Date(data[streetInfo]['count_date']).toLocaleDateString('en-US', dateOptions)
+        data[streetInfo]['count_date'] = dates
+
+
+      })
+    };
+
+    const groupByDate = (data): Object => {
+      const dateObj = {};
+      Object.keys(data).map(streetName => {
+        dateObj[data[streetName]['count_date']] = {
+          name: streetName,
+          data: data[streetName]
+        }
+      })
+      return dateObj
+    }
+
+    const createCategories = (data): Array<String> => {
+      const categoriesArray = []
+
+      Object.keys(data).map(keys => {
+        categoriesArray.push(keys)
+      })
+
+      return categoriesArray
+    }
+
+    const createSeriesDataArray = (data): Array<Object> => {
+      const seriesDataArray = []
+      Object.keys(data).map(streetData => {
+        seriesDataArray.push({
+          name: data[streetData]['name'],
+          data: parseInt(data[streetData]['data']['total'])
+        })
+      })
+
+      return seriesDataArray
+    }
+
+    this.appService.getData().subscribe(data => {
+      let streetInfo = groupByStreets(data);
+      formatDates(streetInfo);
+      streetInfo = groupByDate(streetInfo);
+      categoriesArray = createCategories(streetInfo)
+      seriesDataArray = createSeriesDataArray(streetInfo);
+      console.log('streetInfo', streetInfo);
+      console.log('seriesDataArrray', seriesDataArray);
+
+      this.createChart([], seriesDataArray)
+
+
+
+
+    });
+
+  }
+
+  private createChart(categories: Array<any> = [], seriesData: Array<any> = []): void {
+    this.Highcharts = Highcharts
+    this.chartConstructor = 'chart'
     this.chartOptions = {
       chart: {
-        type:'areaspline'
+        type: 'column'
       },
-      title:{
-        text: 'Chartz'
+      title: {
+        text: 'Average fruit consumption during one week'
       },
-
       legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 150,
-        y: 100,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        enabled: true
       },
       xAxis: {
-        categories: [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-            'Sunday'
-        ],
-        plotBands: [{ // visualize the weekend
-            from: 4.5,
-            to: 6.5,
-            color: 'rgba(68, 170, 213, .2)'
-        }]
+        categories: categories,
       },
       yAxis: {
         title: {
-            text: 'Fruit units'
+          text: 'Fruit units'
         }
       },
       tooltip: {
@@ -66,27 +132,18 @@ export class IntersectionsComponent implements OnInit {
         enabled: false
       },
       plotOptions: {
-        areaspline: {
-            fillOpacity: 0.5
+        column: {
+          fillOpacity: 0.5,
+          stacking: 'normal'
         }
       },
-      series: [{
-        name: 'John',
-        data: [3, 4, 3, 5, 4, 10, 12]
-      }, {
-        name: 'Jane',
-        data: [1, 3, 4, 3, 3, 5, 4]
-      }]
+      series: seriesData
+
     }
-  }
 
-  
-  getData(){
-    this.appService.getData().subscribe(data =>{
-      console.log(data)
-      });
-  }
+    console.log('this.chartOptions', this.chartOptions);
 
+  }
 
 
 

@@ -1,13 +1,13 @@
 <div>
-  <div class="flex-centered">
-      <h1>
-          Did Darby Pee?
-      </h1>
-  </div>
-  <div class="flex-even">
-    <button *ngFor="let button of buttons; let i = index"  routerLink="/{{button}}">{{button}}</button>
-  </div>
-  <div class="flex-centered">
-      <router-outlet></router-outlet>
-  </div>
+    <div class="flex-centered">
+        <h1>
+            Did Darby Pee?
+        </h1>
+    </div>
+    <div class="flex-even">
+        <button *ngFor="let button of buttons; let i = index" routerLink="/{{button}}">{{button}}</button>
+    </div>
+    <div class="fullscreen">
+        <router-outlet></router-outlet>
+    </div>
 </div>

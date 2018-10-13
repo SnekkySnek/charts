@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
+import { AppDataResolver } from "./app-data-resolver";
 
 const routes = [
     {
@@ -13,7 +14,8 @@ const routes = [
     {
         path:'',
         redirectTo: '',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        resolve: AppDataResolver
     }
 ]
 

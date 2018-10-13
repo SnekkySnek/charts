@@ -9,7 +9,7 @@ import { ChartModel } from '../../models/chart-interface';
   styleUrls: ['./intersections.component.css']
 })
 export class IntersectionsComponent implements OnInit {
-  private highcharts:HighchartsChartComponent = Highcharts;
+  private Highcharts = Highcharts;
   private chartConstructor:String = 'chart';
   private chartOptions:ChartModel;
 
@@ -20,7 +20,7 @@ export class IntersectionsComponent implements OnInit {
   ngOnInit() {
     this.chartOptions = {
       chart: {
-        type:'areaSpline'
+        type:'areaspline'
       },
       title:{
         text: 'Chartz'
@@ -78,6 +78,13 @@ export class IntersectionsComponent implements OnInit {
       }]
     }
   }
+
+  
+  // getData(){
+  //   this.appService.getData().subscribe(data =>{
+  //     console.log(data)
+  //     });
+  // }
 
 
 

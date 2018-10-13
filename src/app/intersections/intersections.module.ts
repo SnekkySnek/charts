@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IntersectionsComponent } from './intersections/intersections.component';
 import { RouterModule } from '@angular/router';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
 @NgModule({
   imports: [
     CommonModule,
+    HighchartsChartModule,
     RouterModule.forChild(routes)
   ],
   exports:[RouterModule],

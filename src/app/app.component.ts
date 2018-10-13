@@ -21,9 +21,5 @@ export class AppComponent {
     // })
     
   }
-  // getData(){
-  //   this.appService.getData().subscribe(data =>{
-  //     console.log(data)
-  //     });
-  // }
+
 }

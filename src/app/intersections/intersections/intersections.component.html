@@ -1,4 +1,8 @@
-<div class="flex-center">
+<div class="flex-centered"
+style="margin-top:10px">
+  <button  (click)="getData()">Get Data</button>
+</div>
+<div class="flex-centered">
   <highcharts-chart
   [Highcharts]="Highcharts"
   [constructorType]="chartConstructor"

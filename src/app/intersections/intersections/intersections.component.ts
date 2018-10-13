@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import { ChartModel } from '../../models/chart-interface';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-intersections',
@@ -15,7 +16,7 @@ export class IntersectionsComponent implements OnInit {
 
   
 
-  constructor() { }
+  constructor(private appService: AppService) { }
 
   ngOnInit() {
     this.chartOptions = {
@@ -80,11 +81,11 @@ export class IntersectionsComponent implements OnInit {
   }
 
   
-  // getData(){
-  //   this.appService.getData().subscribe(data =>{
-  //     console.log(data)
-  //     });
-  // }
+  getData(){
+    this.appService.getData().subscribe(data =>{
+      console.log(data)
+      });
+  }
 
 
 

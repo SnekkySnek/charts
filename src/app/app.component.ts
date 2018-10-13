@@ -14,12 +14,4 @@ export class AppComponent {
 
   constructor(private appService: AppService, private route:ActivatedRoute, private router:Router) {  }
 
-  private clicky(i): void {
-    // console.log(i);
-    // this.route.params.subscribe(params => {
-    //   this.router.navigate([i])
-    // })
-    
-  }
-
 }

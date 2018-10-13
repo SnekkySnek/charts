@@ -7,6 +7,10 @@ const routes = [
         loadChildren:'app/darby/darby.module#DarbyModule'
     },
     {
+        path: 'intersections',
+        loadChildren:'app/intersections/intersections.module#IntersectionsModule'
+    },
+    {
         path:'',
         redirectTo: '',
         pathMatch: 'full'

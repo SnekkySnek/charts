@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRouteModule } from './app.routes';
-
+import {HighchartsChartModule} from 'highcharts-angular'
 
 
 @NgModule({
@@ -16,6 +16,7 @@ import { AppRouteModule } from './app.routes';
   imports: [
     BrowserModule,
     AppRouteModule,
+    HighchartsChartModule,
     HttpClientModule
   ],
   providers: [AppService],

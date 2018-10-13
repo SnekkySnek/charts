@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'app';
-  private buttons:Array<String> = ['darby', 'Button2', 'Button3'];
+  private buttons:Array<String> = ['darby', 'intersections', 'Button3'];
   private data = [];
 
   constructor(private appService: AppService, private route:ActivatedRoute, private router:Router) {  }

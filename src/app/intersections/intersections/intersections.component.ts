@@ -10,8 +10,8 @@ import { AppService } from '../../app.service';
   styleUrls: ['./intersections.component.css']
 })
 export class IntersectionsComponent implements OnInit {
-  private Highcharts = Highcharts
-  private chartConstructor: String = ''
+  private Highcharts = Highcharts;
+  private chartConstructor: String = '';
   private chartOptions: ChartModel;
 
 
@@ -23,89 +23,83 @@ export class IntersectionsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.getData()
+    this.getData();
   }
 
 
 
   private getData(): void {
-    let categoriesArray = []
-    let seriesDataArray = []
+    let categoriesArray = [];
+    let seriesDataArray = [];
 
     const groupByStreets = (data): Object => {
-      const streetObj = {}
+      const streetObj = {};
       data.map(streetInfo => {
         streetObj[streetInfo['primary_street'] + ' at ' + streetInfo['cross_street']] = streetInfo;
-      })
+      });
       console.log('streetObj', streetObj);
 
-      return streetObj
+      return streetObj;
     };
 
     const formatDates = (data): void => {
       const dateOptions = { month: '2-digit', day: '2-digit', year: '2-digit' }
       Object.keys(data).map(streetInfo => {
-        let dates = new Date(data[streetInfo]['count_date']).toLocaleDateString('en-US', dateOptions)
-        data[streetInfo]['count_date'] = dates
+        const dates = new Date(data[streetInfo]['count_date']).toLocaleDateString('en-US', dateOptions)
+        data[streetInfo]['count_date'] = dates;
 
 
-      })
+      });
     };
 
-    const groupByDate = (data): Object => {
-      const dateObj = {};
-      Object.keys(data).map(streetName => {
-        dateObj[data[streetName]['count_date']] = {
-          name: streetName,
-          data: data[streetName]
-        }
-      })
-      return dateObj
-    }
 
     const createCategories = (data): Array<String> => {
-      const categoriesArray = []
+      console.log('canaiohdeaw');
+
+      const categoriesArr = [];
 
       Object.keys(data).map(keys => {
-        categoriesArray.push(keys)
-      })
+        categoriesArray.push(keys);
+      });
+      console.log(categoriesArr);
 
-      return categoriesArray
-    }
+
+      return categoriesArr;
+    };
 
     const createSeriesDataArray = (data): Array<Object> => {
-      const seriesDataArray = []
+      const seriesArray: Array<any> = [];
       Object.keys(data).map(streetData => {
-        seriesDataArray.push({
-          name: data[streetData]['name'],
-          data: parseInt(data[streetData]['data']['total'])
-        })
-      })
+        seriesArray.push(
+          {
+            name: streetData,
+            // tslint:disable-next-line:max-line-length
+            data: [parseInt(data[streetData]['n_b'], 10), parseInt(data[streetData]['s_b'], 10), parseInt(data[streetData]['e_b'], 10), parseInt(data[streetData]['w_b'], 10)],
+            stack: data[streetData]['type']
 
-      return seriesDataArray
-    }
+          });
+      });
 
-    this.appService.getData().subscribe(data => {
-      let streetInfo = groupByStreets(data);
+      return seriesArray;
+    };
+
+    this.appService.getIntersectionsData().subscribe(data => {
+      const streetInfo = groupByStreets(data);
       formatDates(streetInfo);
-      streetInfo = groupByDate(streetInfo);
-      categoriesArray = createCategories(streetInfo)
+      categoriesArray = createCategories(streetInfo);
       seriesDataArray = createSeriesDataArray(streetInfo);
       console.log('streetInfo', streetInfo);
+      console.log('categories', categoriesArray);
       console.log('seriesDataArrray', seriesDataArray);
 
-      this.createChart([], seriesDataArray)
-
-
-
-
+      this.createChart(categoriesArray, seriesDataArray.splice(0, 10));
     });
-
   }
 
+
   private createChart(categories: Array<any> = [], seriesData: Array<any> = []): void {
-    this.Highcharts = Highcharts
-    this.chartConstructor = 'chart'
+    this.Highcharts = Highcharts;
+    this.chartConstructor = 'chart';
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -117,7 +111,7 @@ export class IntersectionsComponent implements OnInit {
         enabled: true
       },
       xAxis: {
-        categories: categories,
+        categories: ['North Bound', 'South Bound', 'East Bound', 'West Bound'],
       },
       yAxis: {
         title: {
@@ -125,7 +119,7 @@ export class IntersectionsComponent implements OnInit {
         }
       },
       tooltip: {
-        shared: true,
+        shared: false,
         valueSuffix: ' units'
       },
       credits: {
@@ -139,13 +133,8 @@ export class IntersectionsComponent implements OnInit {
       },
       series: seriesData
 
-    }
+    };
 
     console.log('this.chartOptions', this.chartOptions);
-
   }
-
-
-
-
 }
